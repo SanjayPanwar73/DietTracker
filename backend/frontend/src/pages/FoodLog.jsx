@@ -1,53 +1,22 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // Import CSS for DatePicker
-import { format, isSameDay, parseISO } from "date-fns"; // Import Date Helpers
-import { 
-  Plus, Trash2, Utensils, Flame, Coffee, Sun, Moon, Zap, 
-  Calendar as CalendarIcon, ChevronLeft, ChevronRight 
-} from "lucide-react";
-
-// --- CUSTOM DATE INPUT COMPONENT ---
-// Makes the date picker look like a professional button
-const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
-  <button
-    onClick={onClick}
-    ref={ref}
-    className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:border-green-500 hover:text-green-600 transition"
-  >
-    <CalendarIcon className="w-4 h-4 text-green-600" />
-    {value}
-  </button>
-));
+import { Plus, Trash2, Utensils, Flame, Coffee, Sun, Moon, Zap } from "lucide-react";
 
 const FoodLog = () => {
-  const [foods, setFoods] = useState([]); // Stores ONLY the selected day's foods
+  const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Default to Today
   const navigate = useNavigate();
 
-  // Fetch Foods & Filter by Date
+  // Fetch Foods
   const fetchFoods = async () => {
-    setLoading(true);
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
         "http://localhost:1001/api/food/allFood",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      const allFoods = response.data.foods;
-
-      // --- FILTER LOGIC ---
-      // Keep only foods where createdAt matches selectedDate
-      const filteredFoods = allFoods.filter(food => 
-        isSameDay(parseISO(food.createdAt), selectedDate)
-      );
-
-      setFoods(filteredFoods);
-
+      setFoods(response.data.foods);
     } catch (error) {
       console.error("Error fetching foods:", error);
       navigate("/login");
@@ -56,10 +25,9 @@ const FoodLog = () => {
     }
   };
 
-  // Re-fetch whenever the selectedDate changes
   useEffect(() => {
     fetchFoods();
-  }, [selectedDate, navigate]);
+  }, [navigate]);
 
   // Delete Food
   const deleteFood = async (id) => {
@@ -70,14 +38,13 @@ const FoodLog = () => {
       await axios.delete(`http://localhost:1001/api/food/deleteFood/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Remove item from UI immediately
       setFoods((prevFoods) => prevFoods.filter((food) => food._id !== id));
     } catch (error) {
       console.error("Error deleting food:", error);
     }
   };
 
-  // Calculate Total for the specific day
+  // Calculate Total (Using reduce for cleaner code)
   const totalCalories = foods.reduce((total, food) => total + food.nutritionInfo.calories, 0);
 
   // Helper for Meal Icons/Colors
@@ -88,13 +55,6 @@ const FoodLog = () => {
     if (lowerType.includes("dinner")) return { icon: <Moon className="w-4 h-4" />, bg: "bg-indigo-100 text-indigo-700" };
     if (lowerType.includes("snack")) return { icon: <Zap className="w-4 h-4" />, bg: "bg-pink-100 text-pink-700" };
     return { icon: <Utensils className="w-4 h-4" />, bg: "bg-gray-100 text-gray-700" };
-  };
-
-  // Helper to change day by +/- 1
-  const changeDate = (days) => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(selectedDate.getDate() + days);
-    setSelectedDate(newDate);
   };
 
   if (loading) return (
@@ -115,43 +75,13 @@ const FoodLog = () => {
             <p className="text-gray-500 mt-1">Track your daily meals and nutritional intake.</p>
           </div>
           
-          <div className="flex items-center gap-3">
-             {/* Previous Day Button */}
-             <button onClick={() => changeDate(-1)} className="p-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-green-600 hover:border-green-500 transition">
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            {/* Date Picker Input */}
-            <div className="relative z-20">
-              <DatePicker 
-                selected={selectedDate} 
-                onChange={(date) => setSelectedDate(date)} 
-                dateFormat="MMMM d, yyyy"
-                customInput={<CustomDateInput />}
-                maxDate={new Date()} // Prevent future dates
-              />
-            </div>
-
-            {/* Next Day Button */}
-            <button 
-              onClick={() => changeDate(1)} 
-              disabled={isSameDay(selectedDate, new Date())} 
-              className="p-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-green-600 hover:border-green-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-
-            {/* Add Button (Only show if viewing Today) */}
-            {isSameDay(selectedDate, new Date()) && (
-                <button
-                onClick={() => navigate("/add-food")}
-                className="ml-2 flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-md shadow-green-200 hover:bg-green-700 hover:shadow-green-300 transition transform active:scale-95"
-                >
-                <Plus className="w-5 h-5" />
-                <span className="hidden sm:inline">Add</span>
-                </button>
-            )}
-          </div>
+          <button
+            onClick={() => navigate("/add-food")}
+            className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-md shadow-green-200 hover:bg-green-700 hover:shadow-green-300 transition transform active:scale-95"
+          >
+            <Plus className="w-5 h-5" />
+            Add New Log
+          </button>
         </div>
 
         {/* SUMMARY CARD */}
@@ -161,16 +91,15 @@ const FoodLog = () => {
                     <Flame className="w-6 h-6" />
                 </div>
                 <div>
-                    <p className="text-sm text-gray-500 font-medium">
-                        Calories for <span className="text-green-600 font-bold">{format(selectedDate, "MMM d")}</span>
-                    </p>
+                    <p className="text-sm text-gray-500 font-medium">Total Calories Consumed</p>
                     <p className="text-2xl font-bold text-gray-900">{Math.round(totalCalories)} <span className="text-sm font-normal text-gray-400">kcal</span></p>
                 </div>
             </div>
+            {/* Optional: Add a progress bar here if you have a target */}
         </div>
 
         {/* FOOD LIST */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[300px]">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {foods.length > 0 ? (
                 <div className="divide-y divide-gray-50">
                     {foods.map((food) => {
@@ -206,6 +135,7 @@ const FoodLog = () => {
                                         <Trash2 className="w-5 h-5" />
                                     </button>
                                 </div>
+
                             </div>
                         );
                     })}
@@ -216,10 +146,8 @@ const FoodLog = () => {
                     <div className="bg-gray-50 p-4 rounded-full mb-4">
                         <Utensils className="w-8 h-8 text-gray-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900">No logs for this day</h3>
-                    <p className="text-gray-500 mb-6 max-w-xs mx-auto">
-                        You haven't logged any meals for {format(selectedDate, "MMMM do")}.
-                    </p>
+                    <h3 className="text-lg font-semibold text-gray-900">No meals logged yet</h3>
+                    <p className="text-gray-500 mb-6 max-w-xs mx-auto">Start tracking your nutrition by adding your first meal of the day.</p>
                 </div>
             )}
         </div>

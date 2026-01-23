@@ -1,0 +1,108 @@
+body{
+  font-family: "DM Serif Text", serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* From Uiverse.io by NorthFishHasNa */ 
+.btn {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #3d405b;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 17px;
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+ }
+ 
+ .btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+ }
+ 
+ .btn span:after {
+  content: '»';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -15px;
+  transition: 0.5s;
+ }
+ 
+ .btn:hover span {
+  padding-right: 15px;
+ }
+ 
+ .btn:hover span:after {
+  opacity: 1;
+  right: 0;
+ }
+
+.auth-btn {
+  --primary-color: #16a34a;
+  --secondary-color: #fff;
+  --hover-color: #111;
+  --arrow-width: 10px;
+  --arrow-stroke: 2px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 30px;
+  color: var(--secondary-color);
+  padding: 0.8rem 1rem;
+  background: var(--primary-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.6em;
+  font-weight: bold;
+}
+
+.auth-btn .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-btn .arrow {
+  margin-top: 1px;
+  width: var(--arrow-width);
+  background: var(--primary-color);
+  height: var(--arrow-stroke);
+  position: relative;
+  transition: 0.2s;
+}
+
+.auth-btn .arrow::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px;
+  right: 3px;
+  transition: 0.2s;
+  padding: 3px;
+  transform: rotate(-45deg);
+}
+
+.auth-btn:hover {
+  background-color: var(--hover-color);
+}
+
+.auth-btn:hover .arrow {
+  background: var(--secondary-color);
+}
+
+.auth-btn:hover .arrow:before {
+  right: 0;
+}
+

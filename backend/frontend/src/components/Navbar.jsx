@@ -77,8 +77,6 @@ const Navbar = () => {
               <Link to="/nutritionInfo" className={navLinkStyle}>Nutrition Info</Link>
               <Link to="/mealPlannerHome" className={navLinkStyle}>Meal Planner</Link>
               <Link to="/profile" className={navLinkStyle}>Profile</Link>
-              {/* ADDED HISTORY LINK HERE */}
-              <Link to="/history" className={navLinkStyle}>History</Link>
             </div>
 
             {/* Auth Buttons (Desktop) */}
@@ -119,8 +117,6 @@ const Navbar = () => {
               <Link to="/nutritionInfo" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Nutrition Info</Link>
               <Link to="/mealPlannerHome" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Meal Planner</Link>
               <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Profile</Link>
-              {/* ADDED HISTORY LINK HERE FOR MOBILE */}
-              <Link to="/history" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">History</Link>
               
               <div className="pt-4 pb-2 border-t border-gray-100 mt-2">
                 {isLoggedIn ? (

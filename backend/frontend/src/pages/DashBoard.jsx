@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { Flame, Zap, Droplets, Plus, Activity } from 'lucide-react';
-import { isSameDay, parseISO } from "date-fns"; // <--- 1. Import Date Helpers
+import { Flame, Zap, Droplets, Plus, Activity } from 'lucide-react'; // Removed LogOut and ChefHat as they are in Navbar now
 import {
   Chart as ChartJS,
   BarElement,
@@ -24,7 +23,7 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  const [foods, setFoods] = useState([]); // Will store ONLY today's foods
+  const [foods, setFoods] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
@@ -42,6 +41,8 @@ const Dashboard = () => {
       );
       if (response.data.profile) {
         setProfile(response.data.profile);
+      } else {
+        alert("No profile found. Please create one.");
       }
     } catch (error) {
       console.error("Error getting profile:", error.message);
@@ -60,25 +61,14 @@ const Dashboard = () => {
         "http://localhost:1001/api/food/allFood",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      const allFoods = response.data.foods;
+      const fetchedFoods = response.data.foods;
+      setFoods(fetchedFoods);
 
-      // --- 2. FILTER LOGIC: KEEP ONLY TODAY'S MEALS ---
-      const today = new Date();
-      const todaysFoods = allFoods.filter((food) => 
-        isSameDay(parseISO(food.createdAt), today)
-      );
-
-      // Set state with the FILTERED list
-      setFoods(todaysFoods);
-
-      // Calculate totals based on TODAY'S list
-      const calories = todaysFoods.reduce(
+      const calories = fetchedFoods.reduce(
         (total, food) => total + food.nutritionInfo.calories,
         0
       );
       setTotalCalories(calories);
-
     } catch (error) {
       console.error("Error fetching foods:", error);
       navigate("/login");
@@ -150,6 +140,10 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
       
+      {/* NOTE: The Navbar is gone from here. 
+         It should be rendered in App.js or Layout.js above the Routes 
+      */}
+
       {/* MAIN CONTENT */}
       <main className="p-6 md:p-8 max-w-7xl mx-auto">
         
@@ -158,7 +152,7 @@ const Dashboard = () => {
           <h2 className="text-3xl font-light text-gray-800">
             Welcome back, <span className="font-semibold text-green-700">{profile?.user?.name || "User"}!</span>
           </h2>
-          <p className="text-gray-500 mt-1">Here is your nutrition overview for <span className="font-bold text-gray-700">Today</span>.</p>
+          <p className="text-gray-500 mt-1">Here's your daily nutrition overview.</p>
         </div>
 
         {/* TOP GRID */}
@@ -222,7 +216,7 @@ const Dashboard = () => {
           {/* CARD: Meal Breakdown List */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col h-80">
             <h3 className="font-semibold text-lg text-gray-700 mb-4 flex justify-between items-center">
-              Today's Meals
+              Meal Breakdown
               <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">{foods.length} Items</span>
             </h3>
             
@@ -233,7 +227,7 @@ const Dashboard = () => {
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${index % 2 === 0 ? 'bg-blue-400' : 'bg-yellow-400'}`}></div>
                       <div>
-                        <p className="font-medium text-gray-800 text-sm capitalize">{food.foodName}</p>
+                        <p className="font-medium text-gray-800 text-sm">{food.foodName}</p>
                         <p className="text-xs text-gray-500 capitalize">{food.mealType}</p>
                       </div>
                     </div>
@@ -258,11 +252,7 @@ const Dashboard = () => {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
             <h3 className="font-semibold text-gray-700 mb-2 text-sm">Calories by Meal</h3>
             <div className="flex-1 h-40">
-               {foods.length > 0 ? (
-                 <Bar data={mealBreakdownData} options={cleanChartOptions} />
-               ) : (
-                 <div className="h-full flex items-center justify-center text-xs text-gray-300">No data for today</div>
-               )}
+               <Bar data={mealBreakdownData} options={cleanChartOptions} />
             </div>
           </div>
 
@@ -294,7 +284,13 @@ const Dashboard = () => {
         </div>
       </main>
 
-    
+      {/* Floating Action Button */}
+      <button 
+        onClick={() => navigate('/log-food')} 
+        className="fixed bottom-8 right-8 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 hover:scale-105 transition flex items-center justify-center z-40"
+      >
+         <Plus className="w-6 h-6" />
+      </button>
 
     </div>
   );
