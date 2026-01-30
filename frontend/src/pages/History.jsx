@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // 1. Import useNavigate
 import { format, subDays, parseISO } from "date-fns";
 import { Bar } from "react-chartjs-2";
 import { Calendar, TrendingUp, CheckCircle, AlertCircle, Filter } from "lucide-react";
@@ -21,8 +22,11 @@ const History = () => {
   const [loading, setLoading] = useState(true);
   const [calorieGoal, setCalorieGoal] = useState(2000);
   
-  // NEW: State for Time Range Toggle ('week' or 'month')
+  // State for Time Range Toggle ('week' or 'month')
   const [timeRange, setTimeRange] = useState("week");
+
+  // 2. Initialize Navigation Hook
+  const navigate = useNavigate();
 
   // Helper: Group raw food logs by Date (YYYY-MM-DD)
   const processHistoryData = (foods) => {
@@ -44,7 +48,13 @@ const History = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // 3. SECURITY CHECK: Redirect if no token found
       const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
       try {
         const profileRes = await axios.get("http://localhost:1001/api/profile/getProfile", {
           headers: { Authorization: `Bearer ${token}` }
@@ -62,17 +72,22 @@ const History = () => {
 
       } catch (error) {
         console.error("Error loading history:", error);
+        // Optional: Force logout if token is invalid
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem("token");
+            navigate("/login");
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]); // Add navigate dependency
 
   // --- DYNAMIC CHART DATA ---
   const daysToShow = timeRange === "week" ? 7 : 30;
 
-  // Generate labels for the last X days (reverse order for chart: Oldest -> Newest)
+  // Generate labels for the last X days
   const chartLabelsDates = Array.from({ length: daysToShow }).map((_, i) => {
     const d = subDays(new Date(), (daysToShow - 1) - i); 
     return format(d, "yyyy-MM-dd");
@@ -89,7 +104,6 @@ const History = () => {
         }),
         backgroundColor: (context) => {
             const value = context.raw;
-            // Red if over goal, Green if under
             return value > calorieGoal ? "rgba(239, 68, 68, 0.8)" : "rgba(16, 185, 129, 0.8)";
         },
         borderRadius: 4,
@@ -120,7 +134,7 @@ const History = () => {
         x: { 
             grid: { display: false },
             ticks: { 
-                maxTicksLimit: timeRange === "week" ? 7 : 10, // Show fewer labels on monthly view
+                maxTicksLimit: timeRange === "week" ? 7 : 10,
                 font: { size: 11 }
             }
         },
@@ -183,7 +197,6 @@ const History = () => {
                     <TrendingUp className="w-5 h-5 text-green-500" /> 
                     {timeRange === "week" ? "Weekly Overview" : "Monthly Overview"}
                 </h2>
-                {/* Dynamic Goal Line Legend */}
                 <div className="flex items-center gap-4 text-xs font-medium">
                     <span className="flex items-center gap-1 text-gray-500">
                         <span className="w-2 h-2 rounded-full bg-green-500"></span> Under Goal
@@ -211,8 +224,6 @@ const History = () => {
                         const isGoalMet = day.calories <= calorieGoal;
                         return (
                             <div key={day.date} className="p-5 flex items-center justify-between hover:bg-gray-50 transition group cursor-default">
-                                
-                                {/* Date Info */}
                                 <div className="flex items-center gap-4">
                                     <div className={`p-3 rounded-xl text-center min-w-[60px] ${isGoalMet ? 'bg-green-50' : 'bg-red-50'}`}>
                                         <span className={`block text-xs font-bold uppercase ${isGoalMet ? 'text-green-600' : 'text-red-500'}`}>{format(parseISO(day.date), "MMM")}</span>
@@ -223,8 +234,6 @@ const History = () => {
                                         <p className="text-sm text-gray-500">{day.items} items logged</p>
                                     </div>
                                 </div>
-
-                                {/* Stats & Status */}
                                 <div className="flex items-center gap-6">
                                     <div className="text-right">
                                         <span className={`block font-bold text-lg ${isGoalMet ? 'text-gray-800' : 'text-red-600'}`}>
@@ -232,7 +241,6 @@ const History = () => {
                                         </span>
                                         <span className="text-xs text-gray-400 uppercase">/ {Math.round(calorieGoal)} kcal</span>
                                     </div>
-                                    
                                     <div className={`p-2 rounded-full ${isGoalMet ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
                                         {isGoalMet ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
                                     </div>
@@ -251,7 +259,6 @@ const History = () => {
                 </div>
             )}
         </div>
-
       </div>
     </div>
   );

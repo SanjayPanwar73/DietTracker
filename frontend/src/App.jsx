@@ -16,7 +16,10 @@ import Profile from './pages/Profile'
 import CreateProfile from './pages/CreateProfile'
 import MealPlanner from './pages/MealPlanner'
 import MealPlannerHome from './pages/MealPlannerHome'
-import History from './pages/History' // <--- 1. Import the new History page
+import History from './pages/History'
+import Help from './pages/Help'
+import Specialists from './pages/Specialists' // <--- 1. Import Specialists
+import Videos from './pages/Videos'           // <--- 2. Import Videos
 
 function App() {
   return (
@@ -36,9 +39,12 @@ function App() {
         <Route path="/createProfile" element={<CreateProfile />} />
         <Route path="/mealPlanner" element={<MealPlanner />} />
         <Route path="/mealPlannerHome" element={<MealPlannerHome />} />
+        <Route path="/history" element={<History />} />
         
-        {/* New History Route */}
-        <Route path="/history" element={<History />} /> 
+        {/* Help & Support Routes */}
+        <Route path="/help" element={<Help />} /> 
+        <Route path="/specialists" element={<Specialists />} /> {/* <--- 3. Add Route */}
+        <Route path="/videos" element={<Videos />} />           {/* <--- 4. Add Route */}
       </Routes>
       <Footer />
     </>

@@ -2,9 +2,11 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const tokenBlacklist = new Set(); // In-memory blacklist for invalidated tokens
+// In-memory blacklist for invalidated tokens.
+// NOTE: This resets if the server restarts. For production, use Redis.
+const tokenBlacklist = new Set(); 
 
-// Sign-up function
+// --- 1. Sign-up Function ---
 const signUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -23,7 +25,7 @@ const signUp = async (req, res) => {
       });
     }
 
-    // Hash the password before saving the new user
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
@@ -41,7 +43,7 @@ const signUp = async (req, res) => {
   }
 };
 
-// Login function
+// --- 2. Login Function ---
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -53,28 +55,27 @@ const login = async (req, res) => {
 
     // Find the user by email
     const user = await User.findOne({ email });
+    const errorMsg = "Invalid email or password";
+
+    // If user not found
     if (!user) {
-      return res.status(401).json({
-        message: "Invalid email or password",
-      });
+      return res.status(401).json({ message: errorMsg });
     }
-    
-    console.log("Entered password:", password);
-    console.log("User from DB:", user);
-    console.log("Stored hashed password:", user?.password);
+
+    // Defensive check: ensure password exists in DB
+    if (!user.password) {
+       return res.status(500).json({ message: "User data corrupted. Please reset password." });
+    }
 
     // Compare the entered password with the stored hashed password
-    // Compare the entered password with the stored hashed password
-if (!user.password) {
-  return res.status(500).json({
-    message: "User password missing in database. Please re-register."
-  });
-}
+    const isPassEqual = await bcrypt.compare(password, user.password);
 
-const isPassEqual = await bcrypt.compare(password, user.password);
+    // --- CRITICAL FIX: Check the result of the comparison ---
+    if (!isPassEqual) {
+      return res.status(401).json({ message: errorMsg });
+    }
 
-
-    // Generate a JWT token that expires in 6 hours
+    // Generate JWT Token
     const token = jwt.sign(
       { email: user.email, _id: user._id },
       process.env.JWT_SECRET,
@@ -83,25 +84,25 @@ const isPassEqual = await bcrypt.compare(password, user.password);
 
     res.status(200).json({
       message: "Successfully logged in",
+      success: true,
       token,
       email: user.email,
       name: user.name,
     });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({
-      message: "Internal server error",
-    });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// Logout function
+// --- 3. Logout Function ---
 const logout = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (token) {
-      tokenBlacklist.add(token); // Add token to blacklist
+    // Get token from header (Bearer <token>)
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+        const token = authHeader.split(" ")[1];
+        tokenBlacklist.add(token); // Add to blacklist
     }
 
     res.status(200).json({
@@ -117,6 +118,30 @@ const logout = async (req, res) => {
   }
 };
 
+// --- 4. Middleware to Protect Routes (Check Blacklist) ---
+// Use this function in your routes file for any protected route
+const checkAuth = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(403).json({ message: "Unauthorized: No token provided" });
+    }
 
+    const token = authHeader.split(" ")[1];
 
-module.exports = { signUp, login, logout };
+    // Check if token is in blacklist
+    if (tokenBlacklist.has(token)) {
+        return res.status(401).json({ 
+            message: "Unauthorized: Token invalidated (User logged out)" 
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.status(403).json({ message: "Invalid or expired token" });
+    }
+};
+
+module.exports = { signUp, login, logout, checkAuth };

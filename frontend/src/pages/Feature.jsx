@@ -1,50 +1,117 @@
 import React from 'react';
+import { 
+  Utensils, 
+  Flame, 
+  TrendingUp, 
+  CalendarDays, 
+  FileText, 
+  Sparkles,
+  ArrowRight
+} from 'lucide-react';
 
 const Features = () => {
   return (
-    <div className="features p-8 bg-gray-100">
-      <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Our Features</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {featureData.map((feature, index) => (
-          <div
-            key={index}
-            className="feature-card bg-white shadow-lg p-8 rounded-lg text-center border border-green-600 transition-transform transform hover:-translate-y-2 min-h-[200px] flex flex-col justify-between"
-          >
-            <h3 className="text-2xl font-semibold mb-6 text-green-600">{feature.title}</h3>
-            <p className="text-gray-700">{feature.description}</p>
-          </div>
-        ))}
+    <section className="relative py-24 bg-gray-50 font-sans overflow-hidden">
+      
+      {/* Background Decorative Pattern (Subtle Dots) */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#166534 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
       </div>
-    </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <span className="text-sm font-bold tracking-wider text-green-600 uppercase bg-green-100 px-4 py-1.5 rounded-full">
+            Why Choose Us
+          </span>
+          <h2 className="mt-6 text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
+            Everything you need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-400">eat smarter</span>
+          </h2>
+          <p className="mt-4 text-xl text-gray-500 max-w-2xl mx-auto">
+            Powerful features designed to help you take control of your nutrition journey effortlessly.
+          </p>
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featureData.map((feature, index) => (
+            <div
+              key={index}
+              className="group relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+            >
+              {/* Hover Gradient Overlay */}
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 ${feature.gradient}`}></div>
+
+              {/* Icon */}
+              <div className={`w-14 h-14 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm`}>
+                {feature.icon}
+              </div>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors">
+                {feature.title}
+              </h3>
+              <p className="text-gray-500 leading-relaxed mb-6">
+                {feature.description}
+              </p>
+
+              {/* Decorative 'Read More' Link */}
+              <div className="flex items-center text-sm font-semibold text-green-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                Learn more <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
+// Data Array
 const featureData = [
   {
-    title: 'Discover Amazing Features',
-    description: 'From tracking your meals to calculating calories, our platform helps you achieve your health goals effectively. With user-friendly interfaces and seamless integration, stay on top of your nutrition with ease. Customize your experience to suit your unique needs and preferences!'
+    title: 'Smart Features',
+    description: 'From tracking your meals to calculating calories, our platform helps you achieve your health goals effectively with seamless integration.',
+    icon: <Sparkles className="w-7 h-7 text-amber-500" />,
+    bg: "bg-amber-50",
+    gradient: "bg-gradient-to-br from-amber-400 to-orange-500"
   },
   {
-    title: 'Food Log',
-    description: 'Users can easily log their daily meals and snacks to keep tracking. Whether you’re at home or dining out, effortlessly record your food intake with our extensive food database and barcode scanning feature. Keep a comprehensive diary of your eating habits and improve them over time.'
+    title: 'Easy Food Log',
+    description: 'Effortlessly record your food intake with our extensive food database and barcode scanning feature. Keep a comprehensive diary anywhere.',
+    icon: <Utensils className="w-7 h-7 text-blue-500" />,
+    bg: "bg-blue-50",
+    gradient: "bg-gradient-to-br from-blue-400 to-cyan-500"
   },
   {
-    title: 'Nutritional Information',
-    description: 'Display basic nutritional information for logged foods. Gain insights into the nutrients you consume, such as vitamins, minerals, carbohydrates, and proteins. Make informed dietary choices with detailed breakdowns of each meal, helping you meet your nutritional goals and maintain a balanced diet.'
+    title: 'Nutritional Info',
+    description: 'Gain insights into vitamins, minerals, and macros. Make informed dietary choices with detailed breakdowns of every meal.',
+    icon: <FileText className="w-7 h-7 text-purple-500" />,
+    bg: "bg-purple-50",
+    gradient: "bg-gradient-to-br from-purple-400 to-pink-500"
   },
   {
     title: 'Calorie Counter',
-    description: 'Automatically calculate total calories consumed and keep you updated with the calorie count. Our smart algorithms ensure accuracy, so you can confidently manage your caloric intake. Stay within your desired calorie range with daily and weekly summaries, and adjust your eating habits to achieve your weight goals.'
+    description: 'Our smart algorithms ensure accuracy so you can confidently manage your caloric intake and stay within your desired daily range.',
+    icon: <Flame className="w-7 h-7 text-orange-500" />,
+    bg: "bg-orange-50",
+    gradient: "bg-gradient-to-br from-orange-400 to-red-500"
   },
   {
     title: 'Progress Tracking',
-    description: 'Simple charts to track weight and calorie intake over time. Visualize your journey with easy-to-read graphs and statistics. Track your progress, set achievable targets, and stay motivated by seeing your improvements. Celebrate your milestones and stay on the path to a healthier you.'
+    description: 'Visualize your journey with easy-to-read graphs. Track weight changes, set achievable targets, and celebrate your milestones.',
+    icon: <TrendingUp className="w-7 h-7 text-emerald-500" />,
+    bg: "bg-emerald-50",
+    gradient: "bg-gradient-to-br from-emerald-400 to-green-500"
   },
   {
-    title: 'Meal Plans',
-    description: 'Basic templates for common diet types. Choose from a variety of diet plans, such as ketogenic, vegan, Mediterranean, and more. Each plan comes with pre-designed meal templates to help you get started quickly and ensure balanced nutrition. Customize the plans to suit your preferences and dietary requirements, making healthy eating simple and stress-free.'
+    title: 'Custom Meal Plans',
+    description: 'Choose from Keto, Vegan, Mediterranean, and more. Get pre-designed meal templates to jumpstart your healthy eating habits.',
+    icon: <CalendarDays className="w-7 h-7 text-rose-500" />,
+    bg: "bg-rose-50",
+    gradient: "bg-gradient-to-br from-rose-400 to-red-500"
   }
 ];
-
 
 export default Features;
