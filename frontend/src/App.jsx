@@ -18,8 +18,9 @@ import MealPlanner from './pages/MealPlanner'
 import MealPlannerHome from './pages/MealPlannerHome'
 import History from './pages/History'
 import Help from './pages/Help'
-import Specialists from './pages/Specialists' // <--- 1. Import Specialists
-import Videos from './pages/Videos'           // <--- 2. Import Videos
+import Specialists from './pages/Specialists'
+import Videos from './pages/Videos'
+import PhotoFoodLog from './pages/PhotoFoodLog' // <--- AI Photo Logger
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/dashboard" element={<DashBoard />} />
         <Route path="/foodLog" element={<FoodLog />} />
         <Route path="/add-food" element={<CreateFoodLog />} />
+        <Route path="/photo-log" element={<PhotoFoodLog />} /> {/* <--- AI Photo Logger */}
         <Route path="/nutritionInfo" element={<NutritionInfo />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/createProfile" element={<CreateProfile />} />
@@ -43,8 +45,8 @@ function App() {
         
         {/* Help & Support Routes */}
         <Route path="/help" element={<Help />} /> 
-        <Route path="/specialists" element={<Specialists />} /> {/* <--- 3. Add Route */}
-        <Route path="/videos" element={<Videos />} />           {/* <--- 4. Add Route */}
+        <Route path="/specialists" element={<Specialists />} />
+        <Route path="/videos" element={<Videos />} />
       </Routes>
       <Footer />
     </>

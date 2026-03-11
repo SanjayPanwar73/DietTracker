@@ -12,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', require('./routes/authRouter'));
 app.use('/api/food', require('./routes/foodRouter'));
+app.use('/api/food', require('./routes/Photofoodrouter')); // <--- AI Photo Logger
 app.use('/api/profile', require('./routes/profileRouter'));
 app.use('/api/chat',require('./routes/chatBotRouter'))
 

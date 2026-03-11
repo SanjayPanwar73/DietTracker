@@ -2,15 +2,14 @@ import React, { useState, useEffect, forwardRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // Import CSS for DatePicker
-import { format, isSameDay, parseISO } from "date-fns"; // Import Date Helpers
+import "react-datepicker/dist/react-datepicker.css";
+import { format, isSameDay, parseISO } from "date-fns";
 import { 
   Plus, Trash2, Utensils, Flame, Coffee, Sun, Moon, Zap, 
-  Calendar as CalendarIcon, ChevronLeft, ChevronRight 
+  Calendar as CalendarIcon, ChevronLeft, ChevronRight, Camera // <--- Added Camera
 } from "lucide-react";
 
 // --- CUSTOM DATE INPUT COMPONENT ---
-// Makes the date picker look like a professional button
 const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
   <button
     onClick={onClick}
@@ -23,12 +22,11 @@ const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
 ));
 
 const FoodLog = () => {
-  const [foods, setFoods] = useState([]); // Stores ONLY the selected day's foods
+  const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Default to Today
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const navigate = useNavigate();
 
-  // Fetch Foods & Filter by Date
   const fetchFoods = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -39,13 +37,9 @@ const FoodLog = () => {
       );
       
       const allFoods = response.data.foods;
-
-      // --- FILTER LOGIC ---
-      // Keep only foods where createdAt matches selectedDate
       const filteredFoods = allFoods.filter(food => 
         isSameDay(parseISO(food.createdAt), selectedDate)
       );
-
       setFoods(filteredFoods);
 
     } catch (error) {
@@ -56,12 +50,10 @@ const FoodLog = () => {
     }
   };
 
-  // Re-fetch whenever the selectedDate changes
   useEffect(() => {
     fetchFoods();
   }, [selectedDate, navigate]);
 
-  // Delete Food
   const deleteFood = async (id) => {
     const token = localStorage.getItem("token");
     if(!window.confirm("Are you sure you want to delete this entry?")) return;
@@ -70,17 +62,14 @@ const FoodLog = () => {
       await axios.delete(`http://localhost:1001/api/food/deleteFood/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Remove item from UI immediately
       setFoods((prevFoods) => prevFoods.filter((food) => food._id !== id));
     } catch (error) {
       console.error("Error deleting food:", error);
     }
   };
 
-  // Calculate Total for the specific day
   const totalCalories = foods.reduce((total, food) => total + food.nutritionInfo.calories, 0);
 
-  // Helper for Meal Icons/Colors
   const getMealStyle = (type) => {
     const lowerType = type?.toLowerCase() || "";
     if (lowerType.includes("breakfast")) return { icon: <Coffee className="w-4 h-4" />, bg: "bg-orange-100 text-orange-700" };
@@ -90,7 +79,6 @@ const FoodLog = () => {
     return { icon: <Utensils className="w-4 h-4" />, bg: "bg-gray-100 text-gray-700" };
   };
 
-  // Helper to change day by +/- 1
   const changeDate = (days) => {
     const newDate = new Date(selectedDate);
     newDate.setDate(selectedDate.getDate() + days);
@@ -116,8 +104,8 @@ const FoodLog = () => {
           </div>
           
           <div className="flex items-center gap-3">
-             {/* Previous Day Button */}
-             <button onClick={() => changeDate(-1)} className="p-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-green-600 hover:border-green-500 transition">
+            {/* Previous Day Button */}
+            <button onClick={() => changeDate(-1)} className="p-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-green-600 hover:border-green-500 transition">
               <ChevronLeft className="w-5 h-5" />
             </button>
 
@@ -128,7 +116,7 @@ const FoodLog = () => {
                 onChange={(date) => setSelectedDate(date)} 
                 dateFormat="MMMM d, yyyy"
                 customInput={<CustomDateInput />}
-                maxDate={new Date()} // Prevent future dates
+                maxDate={new Date()}
               />
             </div>
 
@@ -141,15 +129,27 @@ const FoodLog = () => {
               <ChevronRight className="w-5 h-5" />
             </button>
 
-            {/* Add Button (Only show if viewing Today) */}
+            {/* Buttons — only show if viewing Today */}
             {isSameDay(selectedDate, new Date()) && (
+              <>
+                {/* AI Photo Log Button */}  {/* <--- ADDED */}
                 <button
-                onClick={() => navigate("/add-food")}
-                className="ml-2 flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-md shadow-green-200 hover:bg-green-700 hover:shadow-green-300 transition transform active:scale-95"
+                  onClick={() => navigate("/photo-log")}
+                  className="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-2.5 rounded-xl font-medium hover:bg-emerald-100 transition"
                 >
-                <Plus className="w-5 h-5" />
-                <span className="hidden sm:inline">Add</span>
+                  <Camera className="w-4 h-4" />
+                  <span className="hidden sm:inline">Photo</span>
                 </button>
+
+                {/* Manual Add Button */}
+                <button
+                  onClick={() => navigate("/add-food")}
+                  className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-md shadow-green-200 hover:bg-green-700 hover:shadow-green-300 transition transform active:scale-95"
+                >
+                  <Plus className="w-5 h-5" />
+                  <span className="hidden sm:inline">Add</span>
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -211,7 +211,6 @@ const FoodLog = () => {
                     })}
                 </div>
             ) : (
-                // Empty State
                 <div className="p-12 text-center flex flex-col items-center">
                     <div className="bg-gray-50 p-4 rounded-full mb-4">
                         <Utensils className="w-8 h-8 text-gray-400" />
