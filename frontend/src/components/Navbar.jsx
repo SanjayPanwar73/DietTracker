@@ -31,8 +31,16 @@ const Navbar = () => {
       setLoading(true);
 
       try {
-        const response = await axios.post("http://localhost:1001/api/chat/chats", {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setChatMessages((prev) => [...prev, { bot: "Please login to use the chatbot." }]);
+          setLoading(false);
+          return;
+        }
+        const response = await axios.post("http://localhost:1001/api/chat/message", {
           message: userMsg,
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
         });
         setChatMessages((prev) => [...prev, { bot: response.data.reply }]);
       } catch (error) {
@@ -64,10 +72,10 @@ const Navbar = () => {
           <div className="flex justify-between h-16">
             {/* Logo Section */}
             <div className="flex items-center">
-              <Link to="/" className="flex-shrink-0 flex items-center gap-2">
+              <button onClick={toggleChat} className="flex-shrink-0 flex items-center gap-2">
                 <ChefHat className="h-8 w-8 text-green-600" />
                 <span className="text-2xl font-bold text-green-700 tracking-tight">DietTracker</span>
-              </Link>
+              </button>
             </div>
 
             {/* Desktop Menu */}

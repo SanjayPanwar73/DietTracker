@@ -17,6 +17,7 @@ import CreateProfile from './pages/CreateProfile'
 import MealPlanner from './pages/MealPlanner'
 import MealPlannerHome from './pages/MealPlannerHome'
 import History from './pages/History' // <--- 1. Import the new History page
+import ChatBot from './pages/ChatBot'
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
         
         {/* New History Route */}
         <Route path="/history" element={<History />} /> 
+        {/* ChatBot Route */}
+        <Route path="/chatbot" element={<ChatBot />} />
       </Routes>
       <Footer />
     </>
