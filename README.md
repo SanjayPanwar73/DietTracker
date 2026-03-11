@@ -81,7 +81,6 @@ DietTracker/
 │   │   ├── chatBotRouter.js      # Chatbot API routes
 │   │   ├── foodRouter.js         # Food API routes
 │   │   └── profileRouter.js      # Profile API routes
-│   ├── frontend/                 # Embedded frontend (not main)
 │   ├── index.js                  # Server entry point
 │   ├── package.json
 │   └── .env                      # Environment variables

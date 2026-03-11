@@ -24,7 +24,7 @@ const MealPlanner = () => {
       if (!token) return; // Optional: Redirect to login if critical
 
       try {
-        const response = await axios.get("http://localhost:1001/api/profile/getProfile", {
+        const response = await axios.get("/api/profile/getProfile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -65,17 +65,17 @@ const MealPlanner = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800 p-6 md:p-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-100 p-6 md:p-10">
       
       <div className="max-w-6xl mx-auto">
         
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center justify-center gap-3">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center justify-center gap-3">
             <ChefHat className="w-8 h-8 text-green-600" />
             AI Meal Generator
           </h1>
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">
+          <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-xl mx-auto">
             Customize your preferences below and let our AI craft the perfect daily menu for your nutritional goals.
           </p>
         </div>
@@ -84,8 +84,8 @@ const MealPlanner = () => {
           
           {/* LEFT COLUMN: Generator Control Panel */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+              <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                 <Leaf className="w-5 h-5 text-green-500" /> Preferences
               </h2>
               
@@ -93,7 +93,7 @@ const MealPlanner = () => {
                 
                 {/* Calories Input */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
                     Daily Calories
                   </label>
                   <div className="relative">
@@ -104,25 +104,25 @@ const MealPlanner = () => {
                       type="number"
                       value={calories}
                       onChange={(e) => setCalories(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-gray-50 focus:bg-white font-medium"
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 font-medium"
                       placeholder="e.g. 2000"
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <span className="text-gray-400 text-sm">kcal</span>
+                      <span className="text-gray-400 dark:text-gray-500 text-sm">kcal</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Diet Type Select */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
                     Diet Type
                   </label>
                   <div className="relative">
                      <select
                       value={diet}
                       onChange={(e) => setDiet(e.target.value)}
-                      className="block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-gray-50 focus:bg-white appearance-none cursor-pointer"
+                      className="block w-full pl-3 pr-10 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 appearance-none cursor-pointer"
                     >
                       <option value="vegetarian">Vegetarian</option>
                       <option value="vegan">Vegan</option>
@@ -140,7 +140,7 @@ const MealPlanner = () => {
 
                 {/* Exclude Ingredients */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
                     Exclude Ingredients
                   </label>
                   <div className="relative">
@@ -151,7 +151,7 @@ const MealPlanner = () => {
                       type="text"
                       value={exclude}
                       onChange={(e) => setExclude(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-gray-50 focus:bg-white placeholder-gray-400"
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-500"
                       placeholder="e.g. peanuts, shellfish"
                     />
                   </div>
@@ -178,7 +178,7 @@ const MealPlanner = () => {
             
             {/* Error Message */}
             {error && (
-                <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm flex items-start gap-2">
+                <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm flex items-start gap-2">
                     <AlertCircle className="w-5 h-5 shrink-0" />
                     <p>{error}</p>
                 </div>
@@ -193,25 +193,25 @@ const MealPlanner = () => {
                 
                 {/* Summary Stats (If API returns 'nutrients' object) */}
                 {mealPlan.nutrients && (
-                    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-wrap justify-between items-center px-4 md:px-8 gap-4">
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex flex-wrap justify-between items-center px-4 md:px-8 gap-4">
                         <div className="text-center flex-1">
-                            <p className="text-xs text-gray-500 uppercase font-bold">Calories</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Calories</p>
                             <p className="text-xl md:text-2xl font-bold text-green-600">{Math.round(mealPlan.nutrients.calories)}</p>
                         </div>
-                        <div className="h-8 w-px bg-gray-200 hidden md:block"></div>
+                        <div className="h-8 w-px bg-gray-200 dark:bg-gray-600 hidden md:block"></div>
                         <div className="text-center flex-1">
-                            <p className="text-xs text-gray-500 uppercase font-bold">Protein</p>
-                            <p className="text-lg md:text-xl font-bold text-gray-800">{Math.round(mealPlan.nutrients.protein)}g</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Protein</p>
+                            <p className="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200">{Math.round(mealPlan.nutrients.protein)}g</p>
                         </div>
-                        <div className="h-8 w-px bg-gray-200 hidden md:block"></div>
+                        <div className="h-8 w-px bg-gray-200 dark:bg-gray-600 hidden md:block"></div>
                         <div className="text-center flex-1">
-                            <p className="text-xs text-gray-500 uppercase font-bold">Carbs</p>
-                            <p className="text-lg md:text-xl font-bold text-gray-800">{Math.round(mealPlan.nutrients.carbohydrates)}g</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Carbs</p>
+                            <p className="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200">{Math.round(mealPlan.nutrients.carbohydrates)}g</p>
                         </div>
-                        <div className="h-8 w-px bg-gray-200 hidden md:block"></div>
+                        <div className="h-8 w-px bg-gray-200 dark:bg-gray-600 hidden md:block"></div>
                         <div className="text-center flex-1">
-                            <p className="text-xs text-gray-500 uppercase font-bold">Fat</p>
-                            <p className="text-lg md:text-xl font-bold text-gray-800">{Math.round(mealPlan.nutrients.fat)}g</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Fat</p>
+                            <p className="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200">{Math.round(mealPlan.nutrients.fat)}g</p>
                         </div>
                     </div>
                 )}
@@ -219,9 +219,9 @@ const MealPlanner = () => {
                 {/* Meal Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {mealPlan.meals.map((meal) => (
-                    <div key={meal.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col">
+                    <div key={meal.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition group flex flex-col">
                       {/* Image Placeholder */}
-                      <div className="h-32 bg-gray-50 flex items-center justify-center text-gray-300 relative overflow-hidden">
+                      <div className="h-32 bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-300 relative overflow-hidden">
                          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                          <Utensils className="w-10 h-10 group-hover:scale-110 transition duration-300 text-gray-400" />
                          
@@ -230,13 +230,13 @@ const MealPlanner = () => {
                       </div>
                       
                       <div className="p-5 flex-1 flex flex-col">
-                        <h3 className="font-bold text-gray-900 line-clamp-2 mb-3 leading-tight">{meal.title}</h3>
+                        <h3 className="font-bold text-gray-900 dark:text-white line-clamp-2 mb-3 leading-tight">{meal.title}</h3>
                         
-                        <div className="flex items-center gap-4 text-xs text-gray-500 mt-auto mb-4">
-                           <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                        <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-auto mb-4">
+                           <span className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
                               <Clock className="w-3 h-3" /> {meal.readyInMinutes} min
                            </span>
-                           <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                           <span className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
                               <Utensils className="w-3 h-3" /> {meal.servings} serv
                            </span>
                         </div>
@@ -245,7 +245,7 @@ const MealPlanner = () => {
                           href={meal.sourceUrl} 
                           target="_blank" 
                           rel="noreferrer"
-                          className="mt-auto block w-full text-center py-2.5 rounded-xl bg-green-50 text-green-700 text-sm font-semibold hover:bg-green-100 transition border border-green-100"
+                          className="mt-auto block w-full text-center py-2.5 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-semibold hover:bg-green-100 dark:hover:bg-green-900/50 transition border border-green-100 dark:border-green-800"
                         >
                           View Recipe
                         </a>

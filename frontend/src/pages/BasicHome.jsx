@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const BasicHome = () => {
   return (
-    <div className='basic-home h-screen flex flex-col items-center justify-center bg-gray-100'>
+    <div className='basic-home h-screen flex flex-col items-center justify-center bg-green-50'>
       <div className="text-center mb-6">
         <div className="text-4xl font-bold text-green-600">
           Welcome to Diet Tracker

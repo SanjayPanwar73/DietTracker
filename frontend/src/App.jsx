@@ -18,6 +18,8 @@ import MealPlanner from './pages/MealPlanner'
 import MealPlannerHome from './pages/MealPlannerHome'
 import History from './pages/History' // <--- 1. Import the new History page
 import ChatBot from './pages/ChatBot'
+import EditProfile from './pages/EditProfile';
+
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
         <Route path="/createProfile" element={<CreateProfile />} />
         <Route path="/mealPlanner" element={<MealPlanner />} />
         <Route path="/mealPlannerHome" element={<MealPlannerHome />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         
         {/* New History Route */}
         <Route path="/history" element={<History />} /> 

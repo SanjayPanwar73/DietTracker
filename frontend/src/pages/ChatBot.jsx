@@ -21,7 +21,7 @@ const ChatBot = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://localhost:1001/api/chat/message', 
+            const res = await axios.post('/api/chat/message', 
                 { message: input }, 
                 { headers: { Authorization: `Bearer ${token}` } }
             );
