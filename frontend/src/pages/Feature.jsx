@@ -41,7 +41,7 @@ const Features = () => {
               className="group relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
             >
               {/* Hover Gradient Overlay */}
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 ${feature.gradient}`}></div>
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${feature.gradient}`}></div>
 
               {/* Icon */}
               <div className={`w-14 h-14 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm`}>
