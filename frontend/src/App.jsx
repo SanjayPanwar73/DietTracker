@@ -20,6 +20,7 @@ import History from './pages/History'
 import Help from './pages/Help'
 import Specialists from './pages/Specialists'
 import Videos from './pages/Videos'
+import EditProfile from './pages/EditProfile'
 
 // NEW AI-powered pages
 import PhotoFoodLog from './pages/PhotoFoodLog'
@@ -44,6 +45,7 @@ function App() {
         <Route path="/mealPlanner" element={<MealPlanner />} />
         <Route path="/mealPlannerHome" element={<MealPlannerHome />} />
         <Route path="/history" element={<History />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
 
         {/* Help & Support Routes */}
         <Route path="/help" element={<Help />} />

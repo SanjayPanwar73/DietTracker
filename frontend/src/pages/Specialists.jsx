@@ -15,7 +15,7 @@ const Specialists = () => {
       email: "mitahar@rujutadiwekar.com",
       location: "Mumbai, Maharashtra",
       rating: 4.9,
-      image: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Rujuta_Diwekar.jpg" 
+      image: "https://ui-avatars.com/api/?name=Rujuta+Diwekar&size=128&background=d1fae5&color=065f46&font-size=0.4&bold=true&rounded=true"
     },
     {
       id: 2,
@@ -26,7 +26,7 @@ const Specialists = () => {
       email: "ask@drshikha.com",
       location: "New Delhi, Delhi",
       rating: 4.8,
-      image: "https://images.squarespace-cdn.com/content/v1/5e73683f80c65e23101901c6/1586246369528-7X8S8239Y01255554332/Dr-Shikha-Sharma.jpg"
+      image: "https://ui-avatars.com/api/?name=Shikha+Sharma&size=128&background=fce7f3&color=9d174d&font-size=0.4&bold=true&rounded=true"
     },
     {
       id: 3,
@@ -37,7 +37,7 @@ const Specialists = () => {
       email: "info@lukecoutinho.com",
       location: "Mumbai, Maharashtra",
       rating: 5.0,
-      image: "https://pbs.twimg.com/profile_images/1364535384844390403/D_qGqD0Y_400x400.jpg"
+      image: "https://ui-avatars.com/api/?name=Luke+Coutinho&size=128&background=dbeafe&color=1e40af&font-size=0.4&bold=true&rounded=true"
     },
     {
       id: 4,
@@ -48,29 +48,29 @@ const Specialists = () => {
       email: "doctoranjali@gmail.com",
       location: "New Delhi, Delhi",
       rating: 4.9,
-      image: "https://pbs.twimg.com/profile_images/1118128387062407168/2x554443_400x400.jpg"
+      image: "https://ui-avatars.com/api/?name=Anjali+Hooda&size=128&background=fef3c7&color=92400e&font-size=0.4&bold=true&rounded=true"
     },
     {
-        id: 5,
-        name: "Pooja Makhija",
-        role: "Clinical Dietitian",
-        specialty: "Weight Loss & Clinical Nutrition",
-        phone: "+91 98201 44000",
-        email: "pooja@poojamakhija.com",
-        location: "Mumbai, Maharashtra",
-        rating: 4.8,
-        image: "https://in.bmscdn.com/iedb/artist/images/website/poster/large/pooja-makhija-1055866-19-09-2017-04-58-18.jpg"
+      id: 5,
+      name: "Pooja Makhija",
+      role: "Clinical Dietitian",
+      specialty: "Weight Loss & Clinical Nutrition",
+      phone: "+91 98201 44000",
+      email: "pooja@poojamakhija.com",
+      location: "Mumbai, Maharashtra",
+      rating: 4.8,
+      image: "https://ui-avatars.com/api/?name=Pooja+Makhija&size=128&background=ede9fe&color=5b21b6&font-size=0.4&bold=true&rounded=true"
     },
     {
-        id: 6,
-        name: "Ryan Fernando",
-        role: "Sports Nutritionist",
-        specialty: "Performance Nutrition",
-        phone: "+91 97434 30000",
-        email: "ryan@quanutrition.com",
-        location: "Bengaluru, Karnataka",
-        rating: 4.9,
-        image: "https://pbs.twimg.com/profile_images/1544970404095496192/47444344_400x400.jpg"
+      id: 6,
+      name: "Ryan Fernando",
+      role: "Sports Nutritionist",
+      specialty: "Performance Nutrition",
+      phone: "+91 97434 30000",
+      email: "ryan@quanutrition.com",
+      location: "Bengaluru, Karnataka",
+      rating: 4.9,
+      image: "https://ui-avatars.com/api/?name=Ryan+Fernando&size=128&background=ffedd5&color=9a3412&font-size=0.4&bold=true&rounded=true"
     }
   ];
 
