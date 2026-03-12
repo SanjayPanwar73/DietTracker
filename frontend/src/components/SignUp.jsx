@@ -16,16 +16,32 @@ const SignUp = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { name, email, password } = data;
-    try {
-        const response = await axios.post("http://localhost:1001/api/auth/signup", { name, email, password });
-        toast.success('User signed up successfully');
-        navigate('/login');
-    } catch (error) {
-        console.error("There was an error signing up the user:", error);
-        toast.error(`Error: ${error.response.data.message}`);
-    }
+  e.preventDefault();
+  const { name, email, password } = data;
+
+  try {
+    const response = await axios.post(
+      "http://localhost:1001/api/auth/signup",
+      { name, email, password }
+    );
+
+    const { token } = response.data;
+
+    // Store token
+    localStorage.setItem("token", token);
+
+    toast.success("User signed up successfully");
+
+    // Redirect to profile/dashboard
+    navigate("/profile");
+
+  } catch (error) {
+    console.error("There was an error signing up the user:", error);
+
+    toast.error(
+      error.response?.data?.message || "Signup failed"
+    );
+  }
 };
 
 

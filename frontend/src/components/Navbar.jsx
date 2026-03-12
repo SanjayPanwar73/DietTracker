@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { ChefHat, Menu, X, MessageCircle, Send, LogOut } from "lucide-react";
+import {
+  ChefHat, Menu, X, MessageCircle, Send, LogOut,
+  Camera, TrendingUp
+} from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = () => {
@@ -29,14 +32,12 @@ const Navbar = () => {
       setChatMessages([...chatMessages, { user: userMsg }]);
       setMessage("");
       setLoading(true);
-
       try {
         const response = await axios.post("http://localhost:1001/api/chat/chats", {
           message: userMsg,
         });
         setChatMessages((prev) => [...prev, { bot: response.data.reply }]);
       } catch (error) {
-        console.error("Error sending message:", error);
         setChatMessages((prev) => [
           ...prev,
           { bot: "Sorry, something went wrong. Please try again." },
@@ -54,15 +55,18 @@ const Navbar = () => {
     setTimeout(() => navigate("/login"), 1000);
   };
 
-  // Common link styles
   const navLinkStyle = "text-sm font-medium text-gray-500 hover:text-green-600 transition block py-2 lg:py-0";
+  const activeStyle = (path) =>
+    location.pathname === path
+      ? "text-green-600 font-semibold"
+      : "text-gray-500";
 
   return (
     <>
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            {/* Logo Section */}
+            {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center gap-2">
                 <ChefHat className="h-8 w-8 text-green-600" />
@@ -71,18 +75,31 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden lg:flex lg:items-center lg:space-x-8">
-              <Link to="/dashboard" className={navLinkStyle}>Dashboard</Link>
-              <Link to="/foodLog" className={navLinkStyle}>FoodLog</Link>
-              <Link to="/nutritionInfo" className={navLinkStyle}>Nutrition Info</Link>
-              <Link to="/mealPlannerHome" className={navLinkStyle}>Meal Planner</Link>
-              <Link to="/profile" className={navLinkStyle}>Profile</Link>
-              <Link to="/history" className={navLinkStyle}>History</Link>
-              {/* ADDED HELP LINK HERE */}
-              <Link to="/help" className={navLinkStyle}>Help</Link>
+            <div className="hidden lg:flex lg:items-center lg:space-x-6">
+              <Link to="/dashboard" className={`text-sm font-medium transition ${activeStyle("/dashboard")} hover:text-green-600`}>Dashboard</Link>
+              <Link to="/foodLog" className={`text-sm font-medium transition ${activeStyle("/foodLog")} hover:text-green-600`}>Food Log</Link>
+              <Link to="/nutritionInfo" className={`text-sm font-medium transition ${activeStyle("/nutritionInfo")} hover:text-green-600`}>Nutrition</Link>
+              <Link to="/mealPlannerHome" className={`text-sm font-medium transition ${activeStyle("/mealPlannerHome")} hover:text-green-600`}>Meal Planner</Link>
+              <Link to="/history" className={`text-sm font-medium transition ${activeStyle("/history")} hover:text-green-600`}>History</Link>
+              <Link to="/profile" className={`text-sm font-medium transition ${activeStyle("/profile")} hover:text-green-600`}>Profile</Link>
+              <Link to="/help" className={`text-sm font-medium transition ${activeStyle("/help")} hover:text-green-600`}>Help</Link>
+
+              {/* NEW AI features highlighted */}
+              <Link
+                to="/photo-log"
+                className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full hover:bg-emerald-100 transition"
+              >
+                <Camera className="w-3.5 h-3.5" /> Photo Log
+              </Link>
+              <Link
+                to="/weekly-insights"
+                className="flex items-center gap-1.5 text-sm font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-full hover:bg-purple-100 transition"
+              >
+                <TrendingUp className="w-3.5 h-3.5" /> Insights
+              </Link>
             </div>
 
-            {/* Auth Buttons (Desktop) */}
+            {/* Auth Buttons Desktop */}
             <div className="hidden lg:flex lg:items-center">
               {isLoggedIn ? (
                 <button
@@ -103,7 +120,7 @@ const Navbar = () => {
             <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
               >
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -111,26 +128,33 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu */}
         {isOpen && (
           <div className="lg:hidden bg-white border-t border-gray-100">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Dashboard</Link>
-              <Link to="/foodLog" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">FoodLog</Link>
+              <Link to="/foodLog" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Food Log</Link>
               <Link to="/nutritionInfo" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Nutrition Info</Link>
               <Link to="/mealPlannerHome" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Meal Planner</Link>
-              <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Profile</Link>
               <Link to="/history" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">History</Link>
-              {/* ADDED HELP LINK HERE FOR MOBILE */}
+              <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Profile</Link>
               <Link to="/help" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">Help</Link>
-              
+
+              {/* NEW AI features in mobile */}
+              <Link to="/photo-log" className="flex items-center gap-2 px-3 py-2 rounded-md text-base font-semibold text-emerald-700 hover:bg-emerald-50">
+                <Camera className="w-4 h-4" /> AI Photo Log
+              </Link>
+              <Link to="/weekly-insights" className="flex items-center gap-2 px-3 py-2 rounded-md text-base font-semibold text-purple-700 hover:bg-purple-50">
+                <TrendingUp className="w-4 h-4" /> Weekly Insights
+              </Link>
+
               <div className="pt-4 pb-2 border-t border-gray-100 mt-2">
                 {isLoggedIn ? (
                   <button onClick={handleLogout} className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50">Logout</button>
                 ) : (
                   <>
-                      <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Login</Link>
-                      <Link to="/signup" className="block px-3 py-2 rounded-md text-base font-medium text-green-600 hover:bg-green-50">Sign Up</Link>
+                    <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Login</Link>
+                    <Link to="/signup" className="block px-3 py-2 rounded-md text-base font-medium text-green-600 hover:bg-green-50">Sign Up</Link>
                   </>
                 )}
               </div>
@@ -139,9 +163,7 @@ const Navbar = () => {
         )}
       </nav>
 
-      {/* --- CHATBOT UI --- */}
-      
-      {/* Floating Toggle Button */}
+      {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
         className="fixed bottom-6 right-6 p-4 bg-green-600 rounded-full shadow-xl text-white hover:bg-green-700 hover:scale-105 transition z-50 flex items-center justify-center"
@@ -152,7 +174,6 @@ const Navbar = () => {
       {/* Chat Window */}
       {isChatOpen && (
         <div className="fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col h-[500px]">
-          {/* Chat Header */}
           <div className="bg-green-600 p-4 text-white flex justify-between items-center">
             <h3 className="font-semibold flex items-center gap-2">
               <MessageCircle className="w-5 h-5" /> AI Assistant
@@ -162,34 +183,30 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Messages Area */}
           <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50">
             {chatMessages.length === 0 && (
               <p className="text-center text-gray-400 text-sm mt-10">Ask me anything about your diet!</p>
             )}
             {chatMessages.map((msg, index) => (
-              <div key={index} className={`flex ${msg.user ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.user ? 'bg-green-600 text-white rounded-tr-none' : 'bg-white border border-gray-200 text-gray-700 rounded-tl-none shadow-sm'}`}>
+              <div key={index} className={`flex ${msg.user ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.user ? "bg-green-600 text-white rounded-tr-none" : "bg-white border border-gray-200 text-gray-700 rounded-tl-none shadow-sm"}`}>
                   {msg.user || msg.bot}
                 </div>
               </div>
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-gray-200 text-gray-500 text-xs px-3 py-2 rounded-full animate-pulse">
-                  Typing...
-                </div>
+                <div className="bg-gray-200 text-gray-500 text-xs px-3 py-2 rounded-full animate-pulse">Typing...</div>
               </div>
             )}
           </div>
 
-          {/* Input Area */}
           <div className="p-3 bg-white border-t border-gray-100 flex gap-2">
             <input
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+              onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Type your message..."
               className="flex-1 p-2 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 text-sm"
             />

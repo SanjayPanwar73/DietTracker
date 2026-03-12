@@ -11,34 +11,52 @@ const signUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validate input fields
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required", success: false });
-    }
-
-    // Check if the email already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({
-        message: "User already exists. Please log in.",
-        success: false,
+      return res.status(400).json({
+        message: "All fields are required",
+        success: false
       });
     }
 
-    // Hash the password
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(409).json({
+        message: "User already exists. Please log in.",
+        success: false
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword
+    });
+
     await newUser.save();
 
+    // 🔹 Generate JWT token immediately after signup
+    const token = jwt.sign(
+      { email: newUser.email, _id: newUser._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "6h" }
+    );
+
     res.status(201).json({
-      message: "Sign-up successful! New user created.",
+      message: "Sign-up successful!",
       success: true,
+      token,
+      email: newUser.email,
+      name: newUser.name
     });
+
   } catch (error) {
     console.error("Error during sign-up:", error);
     res.status(500).json({
       message: "Internal server error",
-      success: false,
+      success: false
     });
   }
 };
