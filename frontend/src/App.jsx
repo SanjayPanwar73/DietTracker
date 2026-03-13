@@ -20,6 +20,7 @@ import History from './pages/History'
 import Help from './pages/Help'
 import Specialists from './pages/Specialists'
 import Videos from './pages/Videos'
+// import EditProfile from './pages/edit-profile'
 
 // New pages added previously (keep them)
 import PhotoFoodLog from './pages/PhotoFoodLog'
@@ -51,6 +52,7 @@ function App() {
         <Route path="/videos"         element={<Videos />} />
         <Route path="/photo-log"      element={<PhotoFoodLog />} />
         <Route path="/weekly-insights" element={<WeeklyInsights />} />
+        {/* <Route path="/edit-profile"   element={<EditProfile />} /> */}
 
         {/* ── New: Activity Tracker ── */}
         <Route path="/activity"       element={<ActivityTracker />} />

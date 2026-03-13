@@ -29,6 +29,30 @@ const Dashboard = () => {
     getProfile();
   }, []);
 
+
+
+
+  // ----- Burn Calculation -----
+
+const calorieGoal = profile?.calorieRequirement || 2000;
+const extraCalories = Math.max(0, totalCalories - calorieGoal);
+
+const activities = [
+  { name: "🚶 Walking", burnPerMin: 4 },
+  { name: "🏃 Running", burnPerMin: 10 },
+  { name: "🚴 Cycling", burnPerMin: 8 },
+  { name: "🤸 Jump Rope", burnPerMin: 12 },
+];
+
+const burnSuggestions = activities.map((a) => ({
+  activity: a.name,
+  minutes: Math.ceil(extraCalories / a.burnPerMin),
+})); 
+
+
+
+
+
   const getProfile = async () => {
     const token = localStorage.getItem("token");
     if (!token) { navigate("/login"); return; }
@@ -322,6 +346,47 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+
+
+
+
+
+{/* EXTRA CALORIE BURN SUGGESTIONS */}
+{extraCalories > 0 && (
+  <div className="mt-6 bg-red-50 border border-red-200 p-6 rounded-xl shadow-sm">
+    <h3 className="text-lg font-semibold text-red-600 mb-2">
+      Extra Calories Burn Needed
+    </h3>
+
+    <p className="text-gray-600 mb-4">
+      You exceeded your calorie goal by <b>{extraCalories.toFixed(0)} kcal</b>
+    </p>
+
+    <p className="text-gray-500 text-sm mb-2">
+      Burn them with:
+    </p>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {burnSuggestions.map((a, i) => (
+        <div
+          key={i}
+          className="bg-white border border-gray-200 rounded-lg p-3 text-center"
+        >
+          <p className="text-sm font-medium">{a.activity}</p>
+          <p className="text-gray-600 text-xs">{a.minutes} min</p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+ 
+
+
+
+
+
+
 
         {/* ── Row 3: Today's Meals List ── */}
         <div className="dash-card" style={{ padding:'24px' }}>

@@ -6,7 +6,7 @@ import {
   ChefHat, Menu, X, MessageCircle, Send, LogOut,
   Sparkles, ChevronDown, Camera, TrendingUp, Activity,
   LayoutDashboard, UtensilsCrossed, Apple, CalendarDays,
-  User, History, HelpCircle, Zap
+  User, History, UserCheck,BookOpen, Zap
 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -75,7 +75,8 @@ const Navbar = () => {
     { to: "/nutritionInfo",   label: "Nutrition",    icon: <Apple className="w-3.5 h-3.5" /> },
     { to: "/profile",         label: "Profile",      icon: <User className="w-3.5 h-3.5" /> },
     { to: "/history",         label: "History",      icon: <History className="w-3.5 h-3.5" /> },
-    { to: "/help",            label: "Support & Resources",         icon: <HelpCircle className="w-3.5 h-3.5" /> },
+   { to: "/specialists", label: "Experts", icon: <UserCheck className="w-3.5 h-3.5" /> },
+  { to: "/videos", label: "Blogs", icon: <BookOpen className="w-3.5 h-3.5" /> }
   ];
 
   const aiItems = [
