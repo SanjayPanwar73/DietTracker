@@ -14,6 +14,7 @@ import {
   LineElement, BarElement, Title, Tooltip,
   Legend, Filler,
 } from "chart.js";
+import { API_BASE_URL } from "../config/api";
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement,
@@ -103,9 +104,9 @@ const WeeklyInsights = () => {
       if (!token) { navigate("/login"); return; }
       try {
         const [pRes, fRes] = await Promise.all([
-          axios.get("http://localhost:1001/api/profile/getProfile",
+          axios.get(`${API_BASE_URL}/api/profile/getProfile`,
             { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get("http://localhost:1001/api/food/allFood",
+          axios.get(`${API_BASE_URL}/api/food/allFood`,
             { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         setProfile(pRes.data.profile);
@@ -143,7 +144,7 @@ const WeeklyInsights = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:1001/api/insights/weekly",
+        `${API_BASE_URL}/api/insights/weekly`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

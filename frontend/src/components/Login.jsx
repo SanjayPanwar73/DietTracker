@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer , toast } from "react-toastify";
+import { API_BASE_URL } from "../config/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     const {email, password} = data;
     try{
-    const response = await axios.post("http://localhost:1001/api/auth/login", {email, password});
+    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {email, password});
     const token = response.data.token; 
     localStorage.setItem('token', token);
     toast.success('User signed up successfully');

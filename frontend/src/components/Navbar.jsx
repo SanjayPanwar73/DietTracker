@@ -9,6 +9,7 @@ import {
   User, History, UserCheck,BookOpen, Zap
 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from "../config/api";
 
 const Navbar = () => {
   const [isOpen, setIsOpen]             = useState(false);
@@ -51,7 +52,7 @@ const Navbar = () => {
     setMessage("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:1001/api/chat/chats", { message: userMsg });
+      const res = await axios.post(`${API_BASE_URL}/api/chat/chats`, { message: userMsg });
       setChatMessages(prev => [...prev, { bot: res.data.reply }]);
     } catch {
       setChatMessages(prev => [...prev, { bot: "Sorry, something went wrong. Please try again." }]);

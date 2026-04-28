@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { API_BASE_URL } from "../config/api";
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -56,14 +57,14 @@ const History = () => {
       }
 
       try {
-        const profileRes = await axios.get("http://localhost:1001/api/profile/getProfile", {
+        const profileRes = await axios.get(`${API_BASE_URL}/api/profile/getProfile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (profileRes.data.profile) {
             setCalorieGoal(profileRes.data.profile.calorieRequirement);
         }
 
-        const foodRes = await axios.get("http://localhost:1001/api/food/allFood", {
+        const foodRes = await axios.get(`${API_BASE_URL}/api/food/allFood`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         

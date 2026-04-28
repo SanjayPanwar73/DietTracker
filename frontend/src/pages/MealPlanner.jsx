@@ -8,6 +8,7 @@ import {
   ChevronDown, ChevronUp, Sparkles
 } from "lucide-react";
 import { jsPDF } from "jspdf";
+import { API_BASE_URL } from "../config/api";
 
 /* ─── PDF Generator ───────────────────────────────────────────── */
 const downloadMealPlanPDF = (mealPlan, preferences) => {
@@ -250,7 +251,7 @@ const MealPlanner = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
       try {
-        const res = await axios.get("http://localhost:1001/api/profile/getProfile",
+        const res = await axios.get(`${API_BASE_URL}/api/profile/getProfile`,
           { headers: { Authorization: `Bearer ${token}` } });
         if (res.data.profile?.calorieRequirement)
           setCalories(Math.round(res.data.profile.calorieRequirement));
@@ -264,7 +265,7 @@ const MealPlanner = () => {
     setLoading(true); setError(""); setMealPlan(null); setExpanded({});
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:1001/api/mealplan/generate",
+      const res = await axios.post(`${API_BASE_URL}/api/mealplan/generate`,
         { calories, diet, exclude, region },
         { headers: { Authorization: `Bearer ${token}` } });
       setMealPlan(res.data);

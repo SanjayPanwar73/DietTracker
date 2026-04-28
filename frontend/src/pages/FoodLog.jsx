@@ -8,6 +8,7 @@ import {
   Plus, Trash2, Utensils, Flame, Coffee, Sun, Moon, Zap,
   Calendar as CalendarIcon, ChevronLeft, ChevronRight, Camera
 } from "lucide-react";
+import { API_BASE_URL } from "../config/api";
 
 const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
   <button
@@ -30,7 +31,7 @@ const FoodLog = () => {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get("http://localhost:1001/api/food/allFood", {
+      const response = await axios.get(`${API_BASE_URL}/api/food/allFood`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const allFoods = response.data.foods;
@@ -54,7 +55,7 @@ const FoodLog = () => {
     const token = localStorage.getItem("token");
     if (!window.confirm("Are you sure you want to delete this entry?")) return;
     try {
-      await axios.delete(`http://localhost:1001/api/food/deleteFood/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/food/deleteFood/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFoods((prev) => prev.filter((food) => food._id !== id));

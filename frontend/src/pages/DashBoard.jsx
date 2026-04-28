@@ -8,6 +8,7 @@ import {
   Chart as ChartJS, BarElement, CategoryScale, LinearScale,
   ArcElement, Tooltip, Legend, LineElement, PointElement, Filler,
 } from "chart.js";
+import { API_BASE_URL } from "../config/api";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend, LineElement, PointElement, Filler);
 
@@ -57,7 +58,7 @@ const burnSuggestions = activities.map((a) => ({
     const token = localStorage.getItem("token");
     if (!token) { navigate("/login"); return; }
     try {
-      const res = await axios.get("http://localhost:1001/api/profile/getProfile",
+      const res = await axios.get(`${API_BASE_URL}/api/profile/getProfile`,
         { headers: { Authorization: `Bearer ${token}` } });
       if (res.data.profile) setProfile(res.data.profile);
     } catch (e) { console.error(e); }
@@ -67,7 +68,7 @@ const burnSuggestions = activities.map((a) => ({
     const token = localStorage.getItem("token");
     if (!token) { navigate("/login"); return; }
     try {
-      const res = await axios.get("http://localhost:1001/api/food/allFood",
+      const res = await axios.get(`${API_BASE_URL}/api/food/allFood`,
         { headers: { Authorization: `Bearer ${token}` } });
       const today = new Date();
       const todays = res.data.foods.filter(f => isSameDay(parseISO(f.createdAt), today));

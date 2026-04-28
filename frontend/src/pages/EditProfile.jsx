@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from "../config/api";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const EditProfile = () => {
     const fetchCurrentData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:1001/api/profile/getProfile", {
+        const response = await axios.get(`${API_BASE_URL}/api/profile/getProfile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -61,7 +62,7 @@ const EditProfile = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put("http://localhost:1001/api/profile/updateProfile", payload, {
+      const response = await axios.put(`${API_BASE_URL}/api/profile/updateProfile`, payload, {
         headers: { 
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"

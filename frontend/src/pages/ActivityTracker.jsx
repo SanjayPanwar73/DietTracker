@@ -6,6 +6,7 @@ import {
   Wifi, WifiOff, RefreshCw, ArrowLeft,
   Loader2, Activity, AlertCircle, CheckCircle2
 } from 'lucide-react';
+import { API_BASE_URL } from "../config/api";
 
 // ── Metric Card ──────────────────────────────────────────────────
 const MetricCard = ({ icon, label, value, unit, sub, textColor, bgColor }) => (
@@ -136,7 +137,7 @@ const ActivityTracker = () => {
 
   const checkStatus = async () => {
     try {
-      const res = await axios.get('http://localhost:1001/api/fitness/status', authHeader);
+      const res = await axios.get(`${API_BASE_URL}/api/fitness/status`, authHeader);
       setConnected(res.data.connected);
       if (res.data.connected) await fetchFitnessData();
     } catch (e) {
@@ -146,7 +147,7 @@ const ActivityTracker = () => {
 
   const fetchTodayCalories = async () => {
     try {
-      const res = await axios.get('http://localhost:1001/api/food/allFood', authHeader);
+      const res = await axios.get(`${API_BASE_URL}/api/food/allFood`, authHeader);
       const today = new Date();
       const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
       const todayFoods = res.data.foods.filter(f => {
@@ -166,7 +167,7 @@ const ActivityTracker = () => {
     try {
       const today = new Date();
       const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-      const res = await axios.get(`http://localhost:1001/api/fitness/data?date=${dateStr}`, authHeader);
+      const res = await axios.get(`${API_BASE_URL}/api/fitness/data?date=${dateStr}`, authHeader);
       setFitnessData(res.data.data);
     } catch (e) {
       setError(e.response?.data?.message || 'Failed to fetch fitness data. Please try again.');
@@ -179,7 +180,7 @@ const ActivityTracker = () => {
     setConnecting(true);
     setError('');
     try {
-      const res = await axios.get('http://localhost:1001/api/fitness/auth-url', authHeader);
+      const res = await axios.get(`${API_BASE_URL}/api/fitness/auth-url`, authHeader);
       window.location.href = res.data.url;
     } catch (e) {
       setError('Could not start Google Fit connection. Check your backend .env settings.');
@@ -190,7 +191,7 @@ const ActivityTracker = () => {
   const disconnect = async () => {
     if (!window.confirm('Disconnect Google Fit? Your stored fitness data will remain.')) return;
     try {
-      await axios.delete('http://localhost:1001/api/fitness/disconnect', authHeader);
+      await axios.delete(`${API_BASE_URL}/api/fitness/disconnect`, authHeader);
       setConnected(false);
       setFitnessData(null);
     } catch (e) {

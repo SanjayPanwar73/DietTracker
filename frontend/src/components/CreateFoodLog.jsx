@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import {toast , ToastContainer} from 'react-toastify'
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 
 const CreateFoodLog = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const CreateFoodLog = () => {
     try{
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:1001/api/food/createFood",
+        `${API_BASE_URL}/api/food/createFood`,
         food,
         {
           headers: {

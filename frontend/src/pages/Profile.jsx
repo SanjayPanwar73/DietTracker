@@ -5,6 +5,7 @@ import {
   User, Mail, Ruler, Weight, Activity, 
   Target, Flame, Edit3, Calendar, CheckCircle 
 } from 'lucide-react';
+import { API_BASE_URL } from "../config/api";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Profile = () => {
   const getProfile = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:1001/api/profile/getProfile', {
+      const response = await axios.get(`${API_BASE_URL}/api/profile/getProfile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

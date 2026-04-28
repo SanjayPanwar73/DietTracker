@@ -5,6 +5,7 @@ import {
   Camera, Upload, Sparkles, CheckCircle2, Loader2,
   Flame, Beef, Wheat, Droplets, Plus, ArrowLeft, X, RefreshCw, Search
 } from "lucide-react";
+import { API_BASE_URL } from "../config/api";
 
 const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snacks"];
 
@@ -66,7 +67,7 @@ const PhotoFoodLog = () => {
       formData.append("foodName", foodName);
 
       const response = await axios.post(
-        "http://localhost:1001/api/food/analyzePhoto",
+        `${API_BASE_URL}/api/food/analyzePhoto`,
         formData,
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
       );
@@ -86,7 +87,7 @@ const PhotoFoodLog = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:1001/api/food/createFood",
+        `${API_BASE_URL}/api/food/createFood`,
         {
           foodName: analysisResult.foodName,
           quantity,

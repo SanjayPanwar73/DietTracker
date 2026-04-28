@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";  // Import axios
 import { ToastContainer, toast } from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
+import { API_BASE_URL } from "../config/api";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const SignUp = () => {
 
   try {
     const response = await axios.post(
-      "http://localhost:1001/api/auth/signup",
+      `${API_BASE_URL}/api/auth/signup`,
       { name, email, password }
     );
 

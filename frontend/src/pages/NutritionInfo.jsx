@@ -8,6 +8,7 @@ import {
   Utensils, Droplet, Wheat, Activity, 
   Calendar as CalendarIcon, ChevronLeft, ChevronRight 
 } from "lucide-react";
+import { API_BASE_URL } from "../config/api";
 
 // Custom Date Input Component
 const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
@@ -34,7 +35,7 @@ const NutritionInfo = () => {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          "http://localhost:1001/api/food/allFood",
+          `${API_BASE_URL}/api/food/allFood`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
