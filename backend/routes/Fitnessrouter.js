@@ -3,7 +3,7 @@ const router = express.Router();
 const { google } = require('googleapis');
 const authenticate = require('../middlewares/Authenticate');
 const FitnessData = require('../models/Fitnessdata');
-const GoogleToken = require('../models/GoogleToken');
+const GoogleToken = require('../models/Googletoken');
 
 require('dotenv').config();
 
